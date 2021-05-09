@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserSS implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Long id;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -18,20 +18,20 @@ public class UserSS implements UserDetails {
     public UserSS() {
     }
 
-    public Integer getId() {
+    public UserSS(Long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+
+    public Long getId() {
         return id;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
-    }
-
-    public UserSS(Integer id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override

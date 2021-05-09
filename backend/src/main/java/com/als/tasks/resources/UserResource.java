@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping(value = "/users")
 public class UserResource {
 
     @Autowired
     private UserService service;
 
-    @PostMapping(path = "/signup")
+    @PostMapping(value = "/signup")
     public ResponseEntity<Void> signUp(@Valid @RequestBody UserInsertDTO objDTO) {
         User obj = service.fromNewDTO(objDTO);
         obj = service.signUp(obj);

@@ -8,8 +8,14 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.als.tasks.dto.UserInsertDTO;
 import com.als.tasks.resources.exceptions.FieldMessage;
+import com.als.tasks.services.UserService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserInsertValidator implements ConstraintValidator<UserInsert, UserInsertDTO> {
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void initialize(UserInsert ann) {
@@ -20,6 +26,9 @@ public class UserInsertValidator implements ConstraintValidator<UserInsert, User
         List<FieldMessage> list = new ArrayList<>();
 
         // add the reproved tests in the list
+        boolean objExistsByEmail = userService.existsByEmail(objDto.getEmail());
+        if (objExistsByEmail)
+            list.add(new FieldMessage("email", String.format("User with email %s already exists", objDto.getEmail())));
 
         for (FieldMessage e : list) {
             context.disableDefaultConstraintViolation();
