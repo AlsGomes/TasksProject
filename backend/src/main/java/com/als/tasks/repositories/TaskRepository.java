@@ -1,18 +1,16 @@
 package com.als.tasks.repositories;
 
-import java.util.Optional;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.als.tasks.entities.Task;
 import com.als.tasks.entities.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Transactional
-    Optional<User> findByEmail(String email);
-
-    boolean existsByEmail(String email);
-
+    List<Task> findByUser(User user);
 }

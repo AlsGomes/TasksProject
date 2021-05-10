@@ -1,45 +1,33 @@
-package com.als.tasks.entities;
+package com.als.tasks.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.als.tasks.entities.Task;
 
-@Entity
-@Table(name = "tb_tasks")
-public class Task {
+public class TaskDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String desc;
-
-    @Column(nullable = false)
     private LocalDate estimateAt;
-
     private LocalDate doneAt;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
-
-    public Task() {
+    public TaskDTO() {
     }
 
-    public Task(Long id, String desc, LocalDate estimateAt, LocalDate doneAt, User user) {
+    public TaskDTO(Long id, String desc, LocalDate estimateAt, LocalDate doneAt) {
         this.id = id;
         this.desc = desc;
         this.estimateAt = estimateAt;
         this.doneAt = doneAt;
-        this.user = user;
+    }
+
+    public TaskDTO(Task task) {
+        this.id = task.getId();
+        this.desc = task.getDesc();
+        this.estimateAt = task.getEstimateAt();
+        this.doneAt = task.getDoneAt();
     }
 
     public Long getId() {
@@ -74,14 +62,6 @@ public class Task {
         this.doneAt = doneAt;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -98,7 +78,7 @@ public class Task {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Task other = (Task) obj;
+        TaskDTO other = (TaskDTO) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
