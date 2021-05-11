@@ -1,7 +1,7 @@
+import { Lato_400Regular, useFonts } from '@expo-google-fonts/lato';
 import React from 'react';
-import { Text } from 'react-native'
-import Auth from './src/screens/Auth';
-import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
+import { Text } from 'react-native';
+import Navigator from './src/routes/Navigator';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -12,6 +12,6 @@ export default function App() {
     return <Text>Loading...</Text>
 
   return (
-    <Auth />
+    <Navigator />
   );
 }
