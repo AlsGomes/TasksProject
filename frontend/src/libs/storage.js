@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Alert } from 'react-native';
 
 export async function loadTasks() {
     const data = await AsyncStorage.getItem('@tasks:tasks')
@@ -45,4 +46,16 @@ export async function getShowDoneTasksState() {
     let data = await AsyncStorage.getItem('@tasks:showDoneTasksState')
     data = JSON.parse(data)
     return data === 'true' ? true : false
+}
+
+export const serverConfig = {
+    BASE_URL: "http://10.0.0.101:8080"
+}
+
+export function showError(err) {
+    Alert.alert("Ops! Ocorreu um problema", `${err}`)
+}
+
+export function showSuccess(msg) {
+    Alert.alert("Sucesso!", msg)
 }

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ImageBackground,
     StyleSheet,
     Text,
     View,
-    TextInput,
     TouchableOpacity
 } from 'react-native';
 import backgroundImage from '../../assets/imgs/login.jpg';
 import common from '../../assets/styles/common';
 import AuthInput from '../components/AuthInput'
+import axios from 'axios'
+import { serverConfig, showError, showSuccess } from '../libs/storage'
 
 export default function Auth() {
 
@@ -18,6 +19,74 @@ export default function Auth() {
     const [password, setPassword] = useState("")
     const [confirmedPassword, setConfirmedPassword] = useState("")
     const [newUser, setNewUser] = useState(false)
+    const [validForm, setValidForm] = useState(false)
+
+    useEffect(() => {
+        if (newUser) {
+            const valid =
+                (
+                    name && name.trim().length != 0 &&
+                    email && email.trim().length != 0 &&
+                    password && password.trim().length != 0 &&
+                    confirmedPassword && confirmedPassword === password
+                )
+            setValidForm(valid)
+        } else {
+            const valid =
+                (
+                    email && email.trim().length != 0 &&
+                    password && password.trim().length != 0
+                )
+            setValidForm(valid)
+        }
+    }, [name, email, password, confirmedPassword, newUser])
+
+    defaultState = () => {
+        setName("")
+        setEmail("")
+        setPassword("")
+        setConfirmedPassword("")
+        setNewUser(false)
+    }
+
+    signUp = async () => {
+        if (!validForm) {
+            showError("Formulário preenchido incorretamente")
+            return
+        }
+
+        try {
+            await axios.post(`${serverConfig.BASE_URL}/users/signup`, {
+                name,
+                email,
+                password
+            })
+
+            showSuccess("Seja Bem-vindo! Faça login com os dados cadastrados")
+            defaultState()
+        } catch (e) {
+            showError(e)
+        }
+
+    }
+
+    signIn = async () => {
+        if (!validForm) {
+            showError("Formulário preenchido incorretamente")
+        }
+
+        try {
+            await axios.post(`${serverConfig.BASE_URL}/login`, {
+                email,
+                password
+            })
+
+            showSuccess("Seja Bem-vindo!")
+        } catch (e) {
+            showError(e)
+        }
+
+    }
 
     return (
         <ImageBackground source={backgroundImage} style={styles.background}>
@@ -58,7 +127,7 @@ export default function Auth() {
                         secureTextEntry={true}
                     />
                 }
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => { newUser ? signUp() : signIn() }}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}>{newUser ? "Cadastrar-se" : "Entrar"}</Text>
                     </View>
