@@ -15,7 +15,14 @@ import todayImage from '../../assets/imgs/today.jpg';
 import common from '../../assets/styles/common';
 import Task from '../components/Task';
 import AddTask from './AddTask';
-import { loadTasks, saveTask, excludeTask, updateTask, setShowDoneTasksState, getShowDoneTasksState } from '../libs/storage'
+import {
+    loadTasks,
+    saveTask,
+    excludeTask,
+    updateTask,
+    setShowDoneTasksState,
+    getShowDoneTasksState
+} from '../libs/storage'
 
 export default function TaskList() {
     const today = moment().locale('pt-br').format('dddd, D [de] MMMM');

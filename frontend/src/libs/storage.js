@@ -1,10 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native';
+import axios from 'axios'
+import moment from 'moment'
 
 export async function loadTasks() {
-    const data = await AsyncStorage.getItem('@tasks:tasks')
-    const tasksLoaded = data ? JSON.parse(data) : []
-    return tasksLoaded
+    try {
+        const maxDate = moment().endOf("day").add(1, "day").format("YYYY-MM-DD")
+        const res = await axios.get(`${serverConfig.BASE_URL}/tasks/date?date=${maxDate}`)
+        return res.data
+    } catch (e) {
+        showError(e)
+    }
 }
 
 export async function saveTask(newTask) {

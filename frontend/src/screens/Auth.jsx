@@ -12,11 +12,11 @@ import AuthInput from '../components/AuthInput'
 import axios from 'axios'
 import { serverConfig, showError, showSuccess } from '../libs/storage'
 
-export default function Auth() {
+export default function Auth(props) {
 
     const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("als_08.net@hotmail.com")
+    const [password, setPassword] = useState("123456")
     const [confirmedPassword, setConfirmedPassword] = useState("")
     const [newUser, setNewUser] = useState(false)
     const [validForm, setValidForm] = useState(false)
@@ -26,7 +26,7 @@ export default function Auth() {
             const valid =
                 (
                     name && name.trim().length != 0 &&
-                    email && email.trim().length != 0 &&
+                    email && email.trim().length != 0 && email.includes("@") &&
                     password && password.trim().length != 0 &&
                     confirmedPassword && confirmedPassword === password
                 )
@@ -34,7 +34,7 @@ export default function Auth() {
         } else {
             const valid =
                 (
-                    email && email.trim().length != 0 &&
+                    email && email.trim().length != 0 && email.includes("@") &&
                     password && password.trim().length != 0
                 )
             setValidForm(valid)
@@ -76,12 +76,14 @@ export default function Auth() {
         }
 
         try {
-            await axios.post(`${serverConfig.BASE_URL}/login`, {
+            const res = await axios.post(`${serverConfig.BASE_URL}/login`, {
                 email,
                 password
             })
 
+            axios.defaults.headers.common["Authorization"] = res.headers.authorization
             showSuccess("Seja Bem-vindo!")
+            props.navigation.navigate('Home')
         } catch (e) {
             showError(e)
         }
@@ -127,8 +129,11 @@ export default function Auth() {
                         secureTextEntry={true}
                     />
                 }
-                <TouchableOpacity onPress={() => { newUser ? signUp() : signIn() }}>
-                    <View style={styles.button}>
+                <TouchableOpacity
+                    onPress={() => { newUser ? signUp() : signIn() }}
+                    disabled={!validForm}
+                >
+                    <View style={[styles.button, validForm ? {} : { backgroundColor: '#AAAAAA' }]}>
                         <Text style={styles.buttonText}>{newUser ? "Cadastrar-se" : "Entrar"}</Text>
                     </View>
                 </TouchableOpacity>

@@ -1,5 +1,6 @@
 package com.als.tasks.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,12 @@ public class TaskService {
 
     public List<Task> findAll() {
         User user = userService.findByEmail(UserService.authenticated().getUsername());
-        return repository.findByUser(user);
+        return repository.findByUserOrderByEstimateAtAsc(user);
+    }
+
+    public List<Task> findByUserAndEstimateAtBeforeOrderByEstimateAtAsc(LocalDate date) {
+        User user = userService.findByEmail(UserService.authenticated().getUsername());
+        return repository.findByUserAndEstimateAtBeforeOrderByEstimateAtAsc(user, date);
     }
 
     public Task findById(Long id) {

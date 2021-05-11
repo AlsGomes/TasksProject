@@ -2,6 +2,7 @@ package com.als.tasks.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +19,7 @@ public class UserInsertDTO implements Serializable {
 
     @NotNull(message = "email is required")
     @NotEmpty(message = "email cannot be empty")
+    @Email(message = "email is not valid")
     private String email;
 
     @NotNull(message = "password is required")
