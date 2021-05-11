@@ -48,7 +48,7 @@ public class UserService {
     public User fromNewDTO(UserInsertDTO objDTO) {
         User obj = new User();
         obj.setName(objDTO.getName());
-        obj.setEmail(objDTO.getEmail());
+        obj.setEmail(objDTO.getEmail().toLowerCase());
         obj.setPassword(passEncoder.encode(objDTO.getPassword()));
         return obj;
     }
