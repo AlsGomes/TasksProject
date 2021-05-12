@@ -25,7 +25,9 @@ export default function AddTask({ isVisible, onCancel, saveTask }) {
     }
 
     onSave = () => {
-        saveTask && saveTask({ desc, date })
+        const convertedDateToPtBr = new Date(moment(date).add(-3, "hours"))
+        const newTask = { desc: desc, date: convertedDateToPtBr }     
+        saveTask && saveTask(newTask)
         defaultState()
     }
 

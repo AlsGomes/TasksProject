@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.FutureOrPresent;
 
 public class TaskInsertDTO implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -15,7 +14,6 @@ public class TaskInsertDTO implements Serializable {
     private String desc;
 
     @NotNull(message = "estimateAt cannot be null")
-    @FutureOrPresent(message = "estimateAt must be in the future or present")
     private LocalDate estimateAt;
 
     public TaskInsertDTO() {

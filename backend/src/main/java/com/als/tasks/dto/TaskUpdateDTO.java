@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 
 import com.als.tasks.services.validation.TaskUpdate;
 
@@ -15,7 +14,6 @@ public class TaskUpdateDTO implements Serializable {
     @NotNull(message = "id must no be null")
     private Long id;
 
-    @PastOrPresent(message = "doneAt must be in the past or present")
     private LocalDate doneAt;
 
     public TaskUpdateDTO() {

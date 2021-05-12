@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native';
 import axios from 'axios'
 import moment from 'moment'
+import 'moment/locale/pt-br'
+moment.locale('pt-BR')
 
 export async function loadTasks() {
     try {
@@ -14,11 +16,12 @@ export async function loadTasks() {
 }
 
 export async function saveTask(newTask) {
-    const tasks = await loadTasks();
-
-    tasks.push(newTask)
-    await AsyncStorage.setItem('@tasks:tasks',
-        JSON.stringify(tasks))
+    try {
+        const res = await axios.post(`${serverConfig.BASE_URL}/tasks`, newTask)
+        if (res.status == 201) return true
+    } catch (e) {
+        showError(e)
+    }
 }
 
 export async function excludeTask(taskId) {

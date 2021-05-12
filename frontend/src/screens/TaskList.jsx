@@ -50,7 +50,13 @@ export default function TaskList() {
 
     async function loadStorageTasks() {
         const tasksLoaded = await loadTasks();
-        setTasks(tasksLoaded);
+        // PROBLEMA DE RENDERIZAÇÃO NA TELA PROVAVELMENTE PROBLEMA COM ASYNC
+        console.log(tasksLoaded.length)
+        setTasks(tasksLoaded)
+    }
+
+    async function insertNewTask(task) {
+        await saveTask(task)
     }
 
     async function getShow() {
@@ -85,17 +91,16 @@ export default function TaskList() {
         }
 
         const newTask = {
-            id: Math.random(),
             desc: desc,
-            estimateAt: date,
-            doneAt: null
+            estimateAt: date
         }
 
-        saveTask(newTask)
+        insertNewTask(newTask).then(loadStorageTasks())
 
-        const clonedTasks = [...tasks]
+        /* const clonedTasks = [...tasks]
         clonedTasks.push(newTask)
-        setTasks(clonedTasks)
+        setTasks(clonedTasks) */
+
 
         setShowAddTask(false)
     }
