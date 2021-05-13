@@ -5,10 +5,15 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 moment.locale('pt-BR')
 
-export async function loadTasks() {
+export async function loadTasks(daysAhead) {
     try {
-        const maxDate = moment().endOf("day").add(1, "day").format("YYYY-MM-DD")
-        const res = await axios.get(`${serverConfig.BASE_URL}/tasks/date?date=${maxDate}`)
+        const maxDate = moment().endOf("day").add(daysAhead + 1, "day").format("YYYY-MM-DD")
+        let res = null
+        if (daysAhead != -1) {
+            res = await axios.get(`${serverConfig.BASE_URL}/tasks/date?date=${maxDate}`)
+        } else {
+            res = await axios.get(`${serverConfig.BASE_URL}/tasks`)
+        }
         return res.data
     } catch (e) {
         showError(e)
@@ -18,33 +23,25 @@ export async function loadTasks() {
 export async function saveTask(newTask) {
     try {
         const res = await axios.post(`${serverConfig.BASE_URL}/tasks`, newTask)
-        if (res.status == 201) return true
     } catch (e) {
         showError(e)
     }
 }
 
 export async function excludeTask(taskId) {
-    const tasks = await loadTasks()
-    const newList = tasks.filter(t => t.id !== taskId)
-    await AsyncStorage.setItem('@tasks:tasks', JSON.stringify(newList))
+    try {
+        await axios.delete(`${serverConfig.BASE_URL}/tasks/${taskId}`)
+    } catch (e) {
+        showError(e)
+    }
 }
 
 export async function updateTask(task) {
-    const tasks = await loadTasks()
-
-    for (let i = 0; i < tasks.length; i++) {
-        if (tasks[i].id === task.id) {
-            tasks[i] = task
-            break
-        }
+    try {
+        await axios.put(`${serverConfig.BASE_URL}/tasks`, task)
+    } catch (e) {
+        showError(e)
     }
-
-    await AsyncStorage.setItem('@tasks:tasks', JSON.stringify(tasks))
-}
-
-async function removeByKey() {
-    await AsyncStorage.removeItem('@tasks:tasks')
 }
 
 export async function setShowDoneTasksState(state) {

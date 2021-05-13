@@ -1,16 +1,16 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
     ImageBackground,
     StyleSheet,
     Text,
-    View,
-    TouchableOpacity
+    TouchableOpacity,
+    View
 } from 'react-native';
 import backgroundImage from '../../assets/imgs/login.jpg';
 import common from '../../assets/styles/common';
-import AuthInput from '../components/AuthInput'
-import axios from 'axios'
-import { serverConfig, showError, showSuccess } from '../libs/storage'
+import AuthInput from '../components/AuthInput';
+import { serverConfig, showError, showSuccess } from '../libs/storage';
 
 export default function Auth(props) {
 

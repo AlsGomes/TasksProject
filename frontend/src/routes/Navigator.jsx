@@ -1,10 +1,70 @@
+import React from 'react'
 import {
     createAppContainer,
     createSwitchNavigator
 } from 'react-navigation'
 import Auth from '../screens/Auth'
 import TaskList from '../screens/TaskList'
+import { createDrawerNavigator } from 'react-navigation-drawer'
 
+import Menu from '../screens/Menu'
+import common from '../../assets/styles/common'
+
+const menuConfig = {
+    initialRouteName: "Today",
+    contentComponent: Menu,
+    contentOptions: {
+        labelStyle: {
+            fontFamily: common.fontFamily,
+            fontWeight: "normal",
+            fontSize: 20
+        },
+        activeLabelStyle: {
+            color: "#080",
+            fontWeight: "bold"
+        }
+    }
+}
+
+const menuRoutes = {
+    Today: {
+        name: "Today",
+        screen: props => <TaskList title="Hoje" daysAhead={0} {...props} />,
+        navigationOptions: {
+            title: "Hoje"
+        }
+    },
+    Tomorrow: {
+        name: "Tomorrow",
+        screen: props => <TaskList title="Amanhã" daysAhead={1} {...props} />,
+        navigationOptions: {
+            title: "Amanhã"
+        }
+    },
+    Week: {
+        name: "Week",
+        screen: props => <TaskList title="Semana" daysAhead={7} {...props} />,
+        navigationOptions: {
+            title: "Semana"
+        }
+    },
+    Month: {
+        name: "Month",
+        screen: props => <TaskList title="Mês" daysAhead={30} {...props} />,// Calculate the amount of days from now plus 1 month
+        navigationOptions: {
+            title: "Mês"
+        }
+    },
+    All: {
+        name: "All",
+        screen: props => <TaskList title="Todas" daysAhead={-1} {...props} />,
+        navigationOptions: {
+            title: "Todas"
+        }
+    }
+}
+
+const menuNavigator = createDrawerNavigator(menuRoutes, menuConfig)
 
 const mainRoutes = {
     Auth: {
@@ -13,7 +73,7 @@ const mainRoutes = {
     },
     Home: {
         name: 'Home',
-        screen: TaskList
+        screen: menuNavigator
     }
 }
 

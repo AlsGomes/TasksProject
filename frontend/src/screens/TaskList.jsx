@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import todayImage from '../../assets/imgs/today.jpg';
+import tomorrowImage from '../../assets/imgs/tomorrow.jpg';
+import weekImage from '../../assets/imgs/week.jpg';
+import monthImage from '../../assets/imgs/month.jpg';
+import allImage from '../../assets/imgs/month.jpg';
 import common from '../../assets/styles/common';
 import Task from '../components/Task';
 import AddTask from './AddTask';
@@ -24,7 +28,7 @@ import {
     getShowDoneTasksState
 } from '../libs/storage'
 
-export default function TaskList() {
+export default function TaskList(props) {
     const today = moment().locale('pt-br').format('dddd, D [de] MMMM');
 
     const [tasks, setTasks] = useState([]);
@@ -34,7 +38,7 @@ export default function TaskList() {
     const [showAddTask, setShowAddTask] = useState(false)
 
     useEffect(() => {
-        loadStorageTasks();
+        loadStorageTasks(props.daysAhead);
         getShow();
     }, [])
 
@@ -48,15 +52,9 @@ export default function TaskList() {
         setVisibleTasks(showDoneTasks ? tasks : tasks.filter(t => t.doneAt == null))
     }, [tasks])
 
-    async function loadStorageTasks() {
-        const tasksLoaded = await loadTasks();
-        // PROBLEMA DE RENDERIZAÇÃO NA TELA PROVAVELMENTE PROBLEMA COM ASYNC
-        console.log(tasksLoaded.length)
+    async function loadStorageTasks(daysAhead) {
+        const tasksLoaded = await loadTasks(daysAhead);
         setTasks(tasksLoaded)
-    }
-
-    async function insertNewTask(task) {
-        await saveTask(task)
     }
 
     async function getShow() {
@@ -64,25 +62,19 @@ export default function TaskList() {
         setShowDoneTasks(show)
     }
 
-    toggleTask = taskId => {
-        const clonedTasks = [...tasks]
-        const editedTask = clonedTasks.filter(t => t.id === taskId)
-        if (editedTask.length != 0) {
-            const toUpdateTask = editedTask[0]
-            toUpdateTask.doneAt = toUpdateTask.doneAt ? null : new Date()
-            updateTask(toUpdateTask)
-            setTasks(clonedTasks)
-        }
+    toggleTask = async (id, doneAt) => {
+        const task = { id, doneAt: (doneAt ? null : new Date(moment().add(-3, "hours"))) }
+        await updateTask(task)
+        loadStorageTasks(props.daysAhead)
     }
 
-    deleteTask = taskId => {
+    deleteTask = async taskId => {
         if (!taskId) return
-        const clonedTasks = tasks.filter(t => t.id !== taskId)
-        excludeTask(taskId)
-        setTasks(clonedTasks)
+        await excludeTask(taskId)
+        loadStorageTasks(props.daysAhead)
     }
 
-    addTask = ({ desc, date }) => {
+    addTask = async ({ desc, date }) => {
         const validTask = desc && date && desc.trim().length != 0
 
         if (!validTask) {
@@ -95,14 +87,29 @@ export default function TaskList() {
             estimateAt: date
         }
 
-        insertNewTask(newTask).then(loadStorageTasks())
-
-        /* const clonedTasks = [...tasks]
-        clonedTasks.push(newTask)
-        setTasks(clonedTasks) */
-
-
+        await saveTask(newTask)
+        loadStorageTasks(props.daysAhead)
         setShowAddTask(false)
+    }
+
+    getImage = () => {
+        switch (props.daysAhead) {
+            case 0: return todayImage
+            case 1: return tomorrowImage
+            case 7: return weekImage
+            case 30: return monthImage
+            case -1: return monthImage
+        }
+    }
+
+    getColor = () => {
+        switch (props.daysAhead) {
+            case 0: return common.colors.today
+            case 1: return common.colors.tomorrow
+            case 7: return common.colors.week
+            case 30: return common.colors.month
+            case -1: return common.colors.month
+        }
     }
 
     return (
@@ -113,15 +120,18 @@ export default function TaskList() {
                 saveTask={addTask}
             />
 
-            <ImageBackground source={todayImage} style={styles.background}>
+            <ImageBackground source={getImage()} style={styles.background}>
                 <View style={styles.iconBar}>
+                    <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+                        <Icon name="bars" size={20} color={common.colors.secondary} />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => setShowDoneTasks(!showDoneTasks)}>
                         <Icon name={icon} size={20} color={common.colors.secondary} />
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.titleBar}>
-                    <Text style={styles.title}>Hoje</Text>
+                    <Text style={styles.title}>{props.title}</Text>
                     <Text style={styles.subtitle}>{today}</Text>
                 </View>
             </ImageBackground>
@@ -141,7 +151,7 @@ export default function TaskList() {
             </View>
 
             <TouchableOpacity
-                style={styles.addButton}
+                style={[styles.addButton, { backgroundColor: getColor() }]}
                 onPress={() => setShowAddTask(true)}
                 activeOpacity={0.7}
             >
@@ -182,7 +192,7 @@ const styles = StyleSheet.create({
     iconBar: {
         flexDirection: 'row',
         marginHorizontal: 20,
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         marginTop: 50
     },
     addButton: {
@@ -192,7 +202,6 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: common.colors.today,
         justifyContent: 'center',
         alignItems: 'center'
     }

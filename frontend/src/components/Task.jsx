@@ -58,7 +58,7 @@ export default function Task({ task, toggleTask, onDelete }) {
             onSwipeableLeftOpen={() => onDelete && onDelete(task.id)}
         >
             <View style={styles.container}>
-                <TouchableWithoutFeedback onPress={() => toggleTask(task.id)}>
+                <TouchableWithoutFeedback onPress={() => toggleTask(task.id, task.doneAt)}>
                     <View style={styles.checkContainer}>
                         {getCheckView(task.doneAt)}
                     </View>

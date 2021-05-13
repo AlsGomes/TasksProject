@@ -26,7 +26,7 @@ export default function AddTask({ isVisible, onCancel, saveTask }) {
 
     onSave = () => {
         const convertedDateToPtBr = new Date(moment(date).add(-3, "hours"))
-        const newTask = { desc: desc, date: convertedDateToPtBr }     
+        const newTask = { desc: desc, date: convertedDateToPtBr }
         saveTask && saveTask(newTask)
         defaultState()
     }
@@ -40,6 +40,7 @@ export default function AddTask({ isVisible, onCancel, saveTask }) {
                     setShowDatePIcker(false)
                 }}
                 mode='date'
+                onCancel={() => { setShowDatePIcker(false) }}
             />
 
         const dateString = moment(date).format('dddd, D [de] MMMM [de] YYYY')
