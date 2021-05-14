@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.als.tasks.dto.CredentialsDTO;
+import com.als.tasks.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,10 +51,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authResult) throws IOException, ServletException {
-        String email = ((UserSS) authResult.getPrincipal()).getUsername();
+        UserSS userSS = ((UserSS) authResult.getPrincipal());
+        String email = userSS.getUsername();
         String token = jwtUtil.generateToken(email);
         response.addHeader("Authorization", "Bearer " + token);
         response.addHeader("access-control-expose-headers", "Authorization");
+
+        User user = new User(userSS.getId(), userSS.getName(), userSS.getUsername(), null);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        response.getWriter().append(gson.toJson(user));
     }
 
     private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {

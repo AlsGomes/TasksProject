@@ -11,6 +11,7 @@ public class UserSS implements UserDetails {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    private String name;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -18,8 +19,9 @@ public class UserSS implements UserDetails {
     public UserSS() {
     }
 
-    public UserSS(Long id, String email, String password) {
+    public UserSS(Long id, String name, String email, String password) {
         this.id = id;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -27,6 +29,10 @@ public class UserSS implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

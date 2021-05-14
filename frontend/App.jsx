@@ -7,9 +7,9 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     Lato_400Regular
   });
-
+  
   if (!fontsLoaded)
-    return <Text>Loading...</Text>
+    return <Text></Text>
 
   return (
     <Navigator />

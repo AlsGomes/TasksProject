@@ -11,12 +11,13 @@ import backgroundImage from '../../assets/imgs/login.jpg';
 import common from '../../assets/styles/common';
 import AuthInput from '../components/AuthInput';
 import { serverConfig, showError, showSuccess } from '../libs/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Auth(props) {
 
     const [name, setName] = useState("")
-    const [email, setEmail] = useState("als_08.net@hotmail.com")
-    const [password, setPassword] = useState("123456")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [confirmedPassword, setConfirmedPassword] = useState("")
     const [newUser, setNewUser] = useState(false)
     const [validForm, setValidForm] = useState(false)
@@ -81,9 +82,16 @@ export default function Auth(props) {
                 password
             })
 
+            const userData = {
+                token: res.headers.authorization,
+                data: res.data
+            }
+
+            AsyncStorage.setItem("@tasks:userData", JSON.stringify(userData))
             axios.defaults.headers.common["Authorization"] = res.headers.authorization
+            axios.defaults.data = res.data
             showSuccess("Seja Bem-vindo!")
-            props.navigation.navigate('Home')
+            props.navigation.navigate('Home', res.data)
         } catch (e) {
             showError(e)
         }

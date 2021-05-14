@@ -3,12 +3,19 @@ import {
     createAppContainer,
     createSwitchNavigator
 } from 'react-navigation'
-import Auth from '../screens/Auth'
-import TaskList from '../screens/TaskList'
 import { createDrawerNavigator } from 'react-navigation-drawer'
-
-import Menu from '../screens/Menu'
 import common from '../../assets/styles/common'
+import Auth from '../screens/Auth'
+import Menu from '../screens/Menu'
+import TaskList from '../screens/TaskList'
+import AuthOrApp from '../screens/AuthOrApp'
+
+const getTaskList = (title, daysAhead, props) => {
+    console.log("passei")
+    return (
+        <TaskList title={title} daysAhead={daysAhead} {...props} />
+    )
+}
 
 const menuConfig = {
     initialRouteName: "Today",
@@ -29,14 +36,14 @@ const menuConfig = {
 const menuRoutes = {
     Today: {
         name: "Today",
-        screen: props => <TaskList title="Hoje" daysAhead={0} {...props} />,
+        screen: props => getTaskList("Hoje", 0, props),
         navigationOptions: {
             title: "Hoje"
         }
     },
     Tomorrow: {
         name: "Tomorrow",
-        screen: props => <TaskList title="Amanhã" daysAhead={1} {...props} />,
+        screen: props => getTaskList("Amanhã", 1, props),
         navigationOptions: {
             title: "Amanhã"
         }
@@ -50,7 +57,7 @@ const menuRoutes = {
     },
     Month: {
         name: "Month",
-        screen: props => <TaskList title="Mês" daysAhead={30} {...props} />,// Calculate the amount of days from now plus 1 month
+        screen: props => <TaskList title="Mês" daysAhead={30} {...props} />,
         navigationOptions: {
             title: "Mês"
         }
@@ -67,6 +74,10 @@ const menuRoutes = {
 const menuNavigator = createDrawerNavigator(menuRoutes, menuConfig)
 
 const mainRoutes = {
+    AuthOrApp: {
+        name: "AuthOrApp",
+        screen: AuthOrApp
+    },
     Auth: {
         name: 'Auth',
         screen: Auth
@@ -77,5 +88,5 @@ const mainRoutes = {
     }
 }
 
-const mainNavigator = createSwitchNavigator(mainRoutes, { initialRouteName: "Auth" })
+const mainNavigator = createSwitchNavigator(mainRoutes, { initialRouteName: "AuthOrApp" })
 export default createAppContainer(mainNavigator)

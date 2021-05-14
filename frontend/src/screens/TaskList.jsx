@@ -11,22 +11,21 @@ import {
     View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import monthImage from '../../assets/imgs/month.jpg';
 import todayImage from '../../assets/imgs/today.jpg';
 import tomorrowImage from '../../assets/imgs/tomorrow.jpg';
 import weekImage from '../../assets/imgs/week.jpg';
-import monthImage from '../../assets/imgs/month.jpg';
-import allImage from '../../assets/imgs/month.jpg';
 import common from '../../assets/styles/common';
 import Task from '../components/Task';
-import AddTask from './AddTask';
 import {
+    excludeTask,
+    getShowDoneTasksState,
     loadTasks,
     saveTask,
-    excludeTask,
-    updateTask,
     setShowDoneTasksState,
-    getShowDoneTasksState
-} from '../libs/storage'
+    updateTask
+} from '../libs/storage';
+import AddTask from './AddTask';
 
 export default function TaskList(props) {
     const today = moment().locale('pt-br').format('dddd, D [de] MMMM');

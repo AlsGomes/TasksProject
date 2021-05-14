@@ -59,7 +59,20 @@ export const serverConfig = {
 }
 
 export function showError(err) {
-    Alert.alert("Ops! Ocorreu um problema", `${err}`)
+    if (err.response.data.errors) {
+        const errors = err.response.data.errors
+        const messages = errors.map(e => e.message)
+        const allMessages = messages.join("\n")
+        Alert.alert("Ops! Ocorreu um problema", `${allMessages}`)
+    } else if (err.response.data.path) {
+        if (err.response.data.path === "/login" && err.response.data.status === 401) {
+            Alert.alert("Ops! Ocorreu um problema", `Usuário ou senha inválidos`)
+        } else {
+            Alert.alert("Ops! Ocorreu um problema", `${err}`)
+        }
+    } else {
+        Alert.alert("Ops! Ocorreu um problema", `${err}`)
+    }
 }
 
 export function showSuccess(msg) {
