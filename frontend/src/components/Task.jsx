@@ -4,13 +4,13 @@ import React from 'react';
 import {
     StyleSheet,
     Text,
+    TouchableOpacity,
     TouchableWithoutFeedback,
-    View,
-    TouchableOpacity
+    View
 } from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import common from '../../assets/styles/common';
-import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 function getCheckView(doneAt) {
     if (doneAt) {

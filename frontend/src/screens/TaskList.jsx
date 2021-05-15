@@ -94,22 +94,22 @@ export default function TaskList(props) {
     }
 
     getImage = () => {
-        switch (props.daysAhead) {
-            case 0: return todayImage
-            case 1: return tomorrowImage
-            case 7: return weekImage
-            case 30: return monthImage
-            case -1: return monthImage
+        switch (props.title) {
+            case "Hoje": return todayImage
+            case "Amanhã": return tomorrowImage
+            case "Semana": return weekImage
+            case "Mês": return monthImage
+            case "Todas": return monthImage
         }
     }
 
     getColor = () => {
         switch (props.daysAhead) {
-            case 0: return common.colors.today
-            case 1: return common.colors.tomorrow
-            case 7: return common.colors.week
-            case 30: return common.colors.month
-            case -1: return common.colors.month
+            case "Hoje": return common.colors.today
+            case "Amanhã": return common.colors.tomorrow
+            case "Semana": return common.colors.week
+            case "Mês": return common.colors.month
+            case "Todas": return common.colors.month
         }
     }
 

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
@@ -11,7 +12,6 @@ import backgroundImage from '../../assets/imgs/login.jpg';
 import common from '../../assets/styles/common';
 import AuthInput from '../components/AuthInput';
 import { serverConfig, showError, showSuccess } from '../libs/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Auth(props) {
 
@@ -87,7 +87,7 @@ export default function Auth(props) {
                 data: res.data
             }
 
-            await AsyncStorage.setItem("@tasks:userData", JSON.stringify(userData))            
+            await AsyncStorage.setItem("@tasks:userData", JSON.stringify(userData))
             axios.defaults.headers.common["Authorization"] = userData.token
             axios.defaults.data = userData.data
             showSuccess("Seja Bem-vindo!")

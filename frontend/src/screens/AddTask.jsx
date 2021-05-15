@@ -1,17 +1,17 @@
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 import React, { useState } from 'react';
 import {
     Modal,
-    View,
+    Platform,
     StyleSheet,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    TextInput,
     Text,
-    Platform
+    TextInput,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View
 } from 'react-native';
 import common from '../../assets/styles/common';
-import DateTimePicker from '@react-native-community/datetimepicker'
-import moment from 'moment'
 
 export default function AddTask({ isVisible, onCancel, saveTask }) {
 

@@ -1,3 +1,5 @@
+import addMonths from 'date-fns/addMonths'
+import differenceInDays from 'date-fns/differenceInDays'
 import React from 'react'
 import {
     createAppContainer,
@@ -6,14 +8,21 @@ import {
 import { createDrawerNavigator } from 'react-navigation-drawer'
 import common from '../../assets/styles/common'
 import Auth from '../screens/Auth'
+import AuthOrApp from '../screens/AuthOrApp'
 import Menu from '../screens/Menu'
 import TaskList from '../screens/TaskList'
-import AuthOrApp from '../screens/AuthOrApp'
 
-const getTaskList = (title, daysAhead, props) => {    
+const getTaskList = (title, daysAhead, props) => {
     return (
         <TaskList title={title} daysAhead={daysAhead} {...props} />
     )
+}
+
+const getDaysAmountForOneMonth = () => {
+    const now = new Date()
+    const oneMonthLater = addMonths(now, 1)
+    const diff = differenceInDays(oneMonthLater, now)
+    return diff
 }
 
 const menuConfig = {
@@ -49,21 +58,21 @@ const menuRoutes = {
     },
     Week: {
         name: "Week",
-        screen: props => <TaskList title="Semana" daysAhead={7} {...props} />,
+        screen: props => getTaskList("Semana", 7, props),
         navigationOptions: {
             title: "Semana"
         }
     },
     Month: {
         name: "Month",
-        screen: props => <TaskList title="Mês" daysAhead={30} {...props} />,
+        screen: props => getTaskList("Mês", getDaysAmountForOneMonth(), props),
         navigationOptions: {
             title: "Mês"
         }
     },
     All: {
         name: "All",
-        screen: props => <TaskList title="Todas" daysAhead={-1} {...props} />,
+        screen: props => getTaskList("Todas", -1, props),
         navigationOptions: {
             title: "Todas"
         }

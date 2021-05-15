@@ -3,10 +3,10 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import {
     ActivityIndicator,
-    StyleSheet, View
+    StyleSheet,
+    View
 } from 'react-native';
-import { showError } from '../libs/storage';
-import { serverConfig } from '../libs/storage'
+import { serverConfig, showError } from '../libs/storage';
 
 export default function AuthOrApp(props) {
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function AuthOrApp(props) {
                 const userData = userDataJSON ? JSON.parse(userDataJSON) : null
 
                 if (userData) {
-                    const res = await axios.get(`${serverConfig.BASE_URL}/auth/validate/${userData.token.substring(7)}`)                    
+                    const res = await axios.get(`${serverConfig.BASE_URL}/auth/validate/${userData.token.substring(7)}`)
                     if (res.data.valid == true) {
                         axios.defaults.headers.common["Authorization"] = userData.token
                         axios.defaults.data = userData.data

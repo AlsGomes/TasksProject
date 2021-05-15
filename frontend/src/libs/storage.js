@@ -1,8 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 import { Alert } from 'react-native';
-import axios from 'axios'
-import moment from 'moment'
-import 'moment/locale/pt-br'
 moment.locale('pt-BR')
 
 export const logout = async (navigation) => {
