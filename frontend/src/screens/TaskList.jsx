@@ -104,7 +104,7 @@ export default function TaskList(props) {
     }
 
     getColor = () => {
-        switch (props.daysAhead) {
+        switch (props.title) {
             case "Hoje": return common.colors.today
             case "Amanhã": return common.colors.tomorrow
             case "Semana": return common.colors.week
