@@ -26,7 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] PUBLIC_MATCHERS = { "/h2-console/**", "/auth/validate/**" };
+    private static final String[] PUBLIC_MATCHERS = { "/h2-console/**", "/auth/validate/**", "/wakeUp" };
     private static final String[] PUBLIC_MATCHERS_POST = { "/users/signup" };
 
     @Autowired

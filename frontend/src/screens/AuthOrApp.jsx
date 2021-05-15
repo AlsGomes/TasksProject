@@ -9,7 +9,14 @@ import {
 import { serverConfig, showError } from '../libs/storage';
 
 export default function AuthOrApp(props) {
+
+    const wakeUp = () => {
+        axios.get(`${serverConfig.BASE_URL}/wakeUp`)
+    }
+
     useEffect(() => {
+        wakeUp()
+        
         async function getUserData() {
             try {
                 const userDataJSON = await AsyncStorage.getItem("@tasks:userData")
@@ -33,7 +40,7 @@ export default function AuthOrApp(props) {
                 showError(e)
                 props.navigation.navigate("Auth")
             }
-        }
+        }        
 
         getUserData()
     }, [])
