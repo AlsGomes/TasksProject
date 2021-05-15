@@ -6,18 +6,26 @@ import {
     StyleSheet, View
 } from 'react-native';
 import { showError } from '../libs/storage';
+import { serverConfig } from '../libs/storage'
 
 export default function AuthOrApp(props) {
-
     useEffect(() => {
         async function getUserData() {
             try {
-                const userDataJSON = await AsyncStorage.getItem("@tasks:userData")                
+                const userDataJSON = await AsyncStorage.getItem("@tasks:userData")
                 const userData = userDataJSON ? JSON.parse(userDataJSON) : null
 
                 if (userData) {
-                    axios.defaults.headers.common["Authorization"] = userData.token
-                    props.navigation.navigate("Home", userData.data)
+                    const res = await axios.get(`${serverConfig.BASE_URL}/auth/validate/${userData.token.substring(7)}`)                    
+                    if (res.data.valid == true) {
+                        axios.defaults.headers.common["Authorization"] = userData.token
+                        axios.defaults.data = userData.data
+                        props.navigation.navigate("Home", userData.data)
+                    } else {
+                        delete axios.defaults.headers.common["Authorization"]
+                        await AsyncStorage.removeItem("@tasks:userData")
+                        props.navigation.navigate("Auth")
+                    }
                 } else {
                     props.navigation.navigate("Auth")
                 }

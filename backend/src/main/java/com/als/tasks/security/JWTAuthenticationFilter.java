@@ -14,6 +14,7 @@ import com.als.tasks.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -59,7 +60,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         User user = new User(userSS.getId(), userSS.getName(), userSS.getUsername(), null);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        response.getWriter().append(gson.toJson(user));
+        JsonElement payload = gson.toJsonTree(user);
+        response.getWriter().append(payload.toString());
     }
 
     private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {

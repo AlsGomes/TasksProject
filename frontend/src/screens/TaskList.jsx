@@ -5,6 +5,7 @@ import {
     Alert,
     FlatList,
     ImageBackground,
+    RefreshControl,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -35,6 +36,7 @@ export default function TaskList(props) {
     const [showDoneTasks, setShowDoneTasks] = useState();
     const [icon, setIcon] = useState('eye');
     const [showAddTask, setShowAddTask] = useState(false)
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         loadStorageTasks(props.daysAhead);
@@ -111,6 +113,12 @@ export default function TaskList(props) {
         }
     }
 
+    const onRefresh = async () => {
+        setRefreshing(true)
+        await loadStorageTasks(props.daysAhead)
+        setRefreshing(false)
+    }
+
     return (
         <View style={styles.container}>
             <AddTask
@@ -146,6 +154,12 @@ export default function TaskList(props) {
                             onDelete={deleteTask}
                         />
                     )}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
                 />
             </View>
 

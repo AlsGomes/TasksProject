@@ -87,11 +87,11 @@ export default function Auth(props) {
                 data: res.data
             }
 
-            AsyncStorage.setItem("@tasks:userData", JSON.stringify(userData))
-            axios.defaults.headers.common["Authorization"] = res.headers.authorization
-            axios.defaults.data = res.data
+            await AsyncStorage.setItem("@tasks:userData", JSON.stringify(userData))            
+            axios.defaults.headers.common["Authorization"] = userData.token
+            axios.defaults.data = userData.data
             showSuccess("Seja Bem-vindo!")
-            props.navigation.navigate('Home', res.data)
+            props.navigation.navigate('Home', userData.data)
         } catch (e) {
             showError(e)
         }

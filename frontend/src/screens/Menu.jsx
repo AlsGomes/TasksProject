@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
     Platform,
     ScrollView,
@@ -11,17 +10,12 @@ import {
     View
 } from 'react-native'
 import { Gravatar } from 'react-native-gravatar'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { DrawerItems } from 'react-navigation-drawer'
 import common from '../../assets/styles/common'
+import { logout } from '../libs/storage'
 
 export default function Menu(props) {
-
-    const logout = async () => {
-        delete axios.defaults.headers.common["Authorization"]
-        await AsyncStorage.removeItem("@tasks:userData")
-        props.navigation.navigate("AuthOrApp")
-    }
-
     return (
         <ScrollView>
             <View style={styles.header}>
@@ -37,14 +31,14 @@ export default function Menu(props) {
                     <Text style={styles.name}>{props.navigation.getParam('name')}</Text>
                     <Text style={styles.email}>{props.navigation.getParam('email')}</Text>
                 </View>
-                <TouchableOpacity onPress={logout}>
+                <TouchableOpacity onPress={() => logout(props.navigation)}>
                     <View style={styles.logoutIcon}>
                         <Icon name="sign-out" size={30} color="#800" />
                     </View>
                 </TouchableOpacity>
             </View>
             <DrawerItems {...props} />
-        </ScrollView>
+        </ScrollView >
     )
 }
 

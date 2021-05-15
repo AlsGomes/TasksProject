@@ -5,6 +5,12 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 moment.locale('pt-BR')
 
+export const logout = async (navigation) => {
+    delete axios.defaults.headers.common["Authorization"]
+    await AsyncStorage.removeItem("@tasks:userData")
+    navigation.navigate("AuthOrApp")
+}
+
 export async function loadTasks(daysAhead) {
     try {
         const maxDate = moment().endOf("day").add(daysAhead + 1, "day").format("YYYY-MM-DD")
@@ -14,9 +20,10 @@ export async function loadTasks(daysAhead) {
         } else {
             res = await axios.get(`${serverConfig.BASE_URL}/tasks`)
         }
+        
         return res.data
-    } catch (e) {
-        showError(e)
+    } catch (err) {
+        showError(err)
     }
 }
 
@@ -55,7 +62,7 @@ export async function getShowDoneTasksState() {
 }
 
 export const serverConfig = {
-    BASE_URL: "http://10.0.0.101:8080"
+    BASE_URL: "http://10.0.0.106:8080"
 }
 
 export function showError(err) {

@@ -10,8 +10,7 @@ import Menu from '../screens/Menu'
 import TaskList from '../screens/TaskList'
 import AuthOrApp from '../screens/AuthOrApp'
 
-const getTaskList = (title, daysAhead, props) => {
-    console.log("passei")
+const getTaskList = (title, daysAhead, props) => {    
     return (
         <TaskList title={title} daysAhead={daysAhead} {...props} />
     )
