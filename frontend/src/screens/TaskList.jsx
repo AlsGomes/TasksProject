@@ -84,7 +84,7 @@ export default function TaskList(props) {
         }
 
         const newTask = {
-            desc: desc,
+            description: desc,
             estimateAt: date
         }
 

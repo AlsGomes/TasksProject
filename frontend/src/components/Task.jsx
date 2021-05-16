@@ -67,7 +67,7 @@ export default function Task({ task, toggleTask, onDelete }) {
                 <View style={{ width: '80%' }}>
                     <Text
                         style={[styles.desc, task.doneAt ? { textDecorationLine: 'line-through' } : {}]}>
-                        {task.desc + ""}
+                        {task.description + ""}
                     </Text>
                     <Text
                         style={styles.date}>
