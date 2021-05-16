@@ -62,7 +62,8 @@ export async function getShowDoneTasksState() {
 }
 
 export const serverConfig = {
-    BASE_URL: "http://10.0.0.106:8080"
+    /* BASE_URL: "http://10.0.0.106:8080" */
+    BASE_URL: "https://tasks-project-backend.herokuapp.com"
 }
 
 export function showError(err) {
