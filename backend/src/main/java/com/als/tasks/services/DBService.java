@@ -28,16 +28,16 @@ public class DBService {
 
         LocalDate now = LocalDate.now();
 
-        User u1 = new User(1L, "alisson", "als_08.net@hotmail.com", passEncoder.encode("123456"));
+        User u1 = new User(null, "alisson", "als_08.net@hotmail.com", passEncoder.encode("123456"));
         userRepository.save(u1);
 
-        Task t1 = new Task(1L, "Reunião com Ricardo", now, now, u1);
-        Task t2 = new Task(2L, "Reunião com Paula", now.plusDays(1), null, u1);
-        Task t3 = new Task(3L, "Terminar Curso de React Native", now.plusDays(7), null, u1);
-        Task t4 = new Task(4L, "Documentar API de Tasks", now.plusDays(1), null, u1);
-        Task t5 = new Task(5L, "Documentar API Telegram Bot", now.plusMonths(1), null, u1);
-        Task t6 = new Task(6L, "Alimentar meus gatos amanhã", now.plusDays(1), null, u1);
-        Task t7 = new Task(7L, "Mudar de casa", now.plusMonths(3), null, u1);
+        Task t1 = new Task(null, "Reunião com Ricardo", now, now, u1);
+        Task t2 = new Task(null, "Reunião com Paula", now.plusDays(1), null, u1);
+        Task t3 = new Task(null, "Terminar Curso de React Native", now.plusDays(7), null, u1);
+        Task t4 = new Task(null, "Documentar API de Tasks", now.plusDays(1), null, u1);
+        Task t5 = new Task(null, "Documentar API Telegram Bot", now.plusMonths(1), null, u1);
+        Task t6 = new Task(null, "Alimentar meus gatos amanhã", now.plusDays(1), null, u1);
+        Task t7 = new Task(null, "Mudar de casa", now.plusMonths(3), null, u1);
 
         taskRepository.saveAll(Arrays.asList(t1, t2, t3, t4, t5, t6, t7));
     }

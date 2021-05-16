@@ -9,23 +9,23 @@ public class TaskDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-    private String desc;
+    private String description;
     private LocalDate estimateAt;
     private LocalDate doneAt;
 
     public TaskDTO() {
     }
 
-    public TaskDTO(Long id, String desc, LocalDate estimateAt, LocalDate doneAt) {
+    public TaskDTO(Long id, String description, LocalDate estimateAt, LocalDate doneAt) {
         this.id = id;
-        this.desc = desc;
+        this.description = description;
         this.estimateAt = estimateAt;
         this.doneAt = doneAt;
     }
 
     public TaskDTO(Task task) {
         this.id = task.getId();
-        this.desc = task.getDesc();
+        this.description = task.getDescription();
         this.estimateAt = task.getEstimateAt();
         this.doneAt = task.getDoneAt();
     }
@@ -38,12 +38,12 @@ public class TaskDTO implements Serializable {
         this.id = id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getEstimateAt() {

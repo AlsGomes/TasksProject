@@ -20,7 +20,7 @@ public class Task {
     private Long id;
 
     @Column(nullable = false)
-    private String desc;
+    private String description;
 
     @Column(nullable = false)
     private LocalDate estimateAt;
@@ -34,9 +34,9 @@ public class Task {
     public Task() {
     }
 
-    public Task(Long id, String desc, LocalDate estimateAt, LocalDate doneAt, User user) {
+    public Task(Long id, String description, LocalDate estimateAt, LocalDate doneAt, User user) {
         this.id = id;
-        this.desc = desc;
+        this.description = description;
         this.estimateAt = estimateAt;
         this.doneAt = doneAt;
         this.user = user;
@@ -50,12 +50,12 @@ public class Task {
         this.id = id;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getEstimateAt() {

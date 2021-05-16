@@ -61,7 +61,7 @@ public class TaskService {
 
     public Task fromNewDTO(TaskInsertDTO objDTO) {
         Task obj = new Task();
-        obj.setDesc(objDTO.getDesc());
+        obj.setDescription(objDTO.getDescription());
         obj.setEstimateAt(objDTO.getEstimateAt());
         return obj;
     }
