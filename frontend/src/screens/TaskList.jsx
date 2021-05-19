@@ -12,6 +12,7 @@ import {
     View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
 import monthImage from '../../assets/imgs/month.jpg';
 import todayImage from '../../assets/imgs/today.jpg';
 import tomorrowImage from '../../assets/imgs/tomorrow.jpg';
@@ -20,59 +21,52 @@ import common from '../../assets/styles/common';
 import Task from '../components/Task';
 import {
     excludeTask,
-    getShowDoneTasksState,
-    loadTasks,
     saveTask,
-    setShowDoneTasksState,
     updateTask
 } from '../libs/storage';
+import { alterShowDoneTasks, fetchShowDoneTasks, fetchTasks } from '../store/actions/tasksAction';
 import AddTask from './AddTask';
 
-export default function TaskList(props) {
+function TaskList(props) {
     const today = moment().locale('pt-br').format('dddd, D [de] MMMM');
 
-    const [tasks, setTasks] = useState([]);
-    const [visibleTasks, setVisibleTasks] = useState(tasks)
-    const [showDoneTasks, setShowDoneTasks] = useState();
+    const [visibleTasks, setVisibleTasks] = useState([])
     const [icon, setIcon] = useState('eye');
     const [showAddTask, setShowAddTask] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        loadStorageTasks(props.daysAhead);
-        getShow();
+        const focusListener = props.navigation.addListener('didFocus', () => {
+            props.onFetchTasks(props.daysAhead);
+        });
+
+        props.onFetchTasks(props.daysAhead);
+        props.onFetchShowDoneTasks();
+
+        return () => {
+            focusListener.remove();
+        }
     }, [])
 
     useEffect(() => {
-        setIcon(showDoneTasks ? 'eye' : 'eye-slash')
-        setVisibleTasks(showDoneTasks ? tasks : visibleTasks.filter(t => t.doneAt == null))
-        setShowDoneTasksState(showDoneTasks)
-    }, [showDoneTasks])
+        setIcon(props.showDoneTasks ? 'eye' : 'eye-slash')
+        setVisibleTasks(props.showDoneTasks ? props.tasks : props.tasks.filter(t => t.doneAt == null))
+    }, [props.showDoneTasks])
 
     useEffect(() => {
-        setVisibleTasks(showDoneTasks ? tasks : tasks.filter(t => t.doneAt == null))
-    }, [tasks])
-
-    async function loadStorageTasks(daysAhead) {
-        const tasksLoaded = await loadTasks(daysAhead);
-        setTasks(tasksLoaded)
-    }
-
-    async function getShow() {
-        const show = await getShowDoneTasksState()
-        setShowDoneTasks(show)
-    }
+        setVisibleTasks(props.showDoneTasks ? props.tasks : props.tasks.filter(t => t.doneAt == null))
+    }, [props.tasks])
 
     toggleTask = async (id, doneAt) => {
         const task = { id, doneAt: (doneAt ? null : new Date(moment().add(-3, "hours"))) }
         await updateTask(task)
-        loadStorageTasks(props.daysAhead)
+        props.onFetchTasks(props.daysAhead)
     }
 
     deleteTask = async taskId => {
         if (!taskId) return
         await excludeTask(taskId)
-        loadStorageTasks(props.daysAhead)
+        props.onFetchTasks(props.daysAhead)
     }
 
     addTask = async ({ desc, date }) => {
@@ -89,7 +83,7 @@ export default function TaskList(props) {
         }
 
         await saveTask(newTask)
-        loadStorageTasks(props.daysAhead)
+        props.onFetchTasks(props.daysAhead)
         setShowAddTask(false)
     }
 
@@ -115,7 +109,7 @@ export default function TaskList(props) {
 
     const onRefresh = async () => {
         setRefreshing(true)
-        await loadStorageTasks(props.daysAhead)
+        props.onFetchTasks(props.daysAhead)
         setRefreshing(false)
     }
 
@@ -132,7 +126,7 @@ export default function TaskList(props) {
                     <TouchableOpacity onPress={() => props.navigation.openDrawer()}>
                         <Icon name="bars" size={20} color={common.colors.secondary} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setShowDoneTasks(!showDoneTasks)}>
+                    <TouchableOpacity onPress={() => props.onAlterShowDoneTasks(!props.showDoneTasks)}>
                         <Icon name={icon} size={20} color={common.colors.secondary} />
                     </TouchableOpacity>
                 </View>
@@ -218,4 +212,21 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     }
-});
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchTasks: daysAhead => dispatch(fetchTasks(daysAhead)),
+        onAlterShowDoneTasks: show => dispatch(alterShowDoneTasks(show)),
+        onFetchShowDoneTasks: () => dispatch(fetchShowDoneTasks())
+    }
+}
+
+const mapStateToProps = (props) => {
+    return {
+        tasks: props.tasksReducer.tasks,
+        showDoneTasks: props.tasksReducer.showDoneTasks
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList)

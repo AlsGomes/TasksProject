@@ -20,7 +20,7 @@ export async function loadTasks(daysAhead) {
         } else {
             res = await axios.get(`${serverConfig.BASE_URL}/tasks`)
         }
-        
+
         return res.data
     } catch (err) {
         showError(err)
@@ -49,16 +49,6 @@ export async function updateTask(task) {
     } catch (e) {
         showError(e)
     }
-}
-
-export async function setShowDoneTasksState(state) {
-    await AsyncStorage.setItem('@tasks:showDoneTasksState', JSON.stringify(state === true ? 'true' : 'false'))
-}
-
-export async function getShowDoneTasksState() {
-    let data = await AsyncStorage.getItem('@tasks:showDoneTasksState')
-    data = JSON.parse(data)
-    return data === 'true' ? true : false
 }
 
 export const serverConfig = {

@@ -36,7 +36,7 @@ export default function AddTask({ isVisible, onCancel, saveTask }) {
             <DateTimePicker
                 value={date}
                 onChange={(_, newDate) => {
-                    setDate(newDate)
+                    setDate(newDate ? newDate : date)
                     setShowDatePIcker(false)
                 }}
                 mode='date'
