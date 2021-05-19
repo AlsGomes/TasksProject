@@ -26,6 +26,7 @@ import {
 } from '../libs/storage';
 import { alterShowDoneTasks, fetchShowDoneTasks, fetchTasks } from '../store/actions/tasksAction';
 import AddTask from './AddTask';
+import { Load } from '../components/Load'
 
 function TaskList(props) {
     const today = moment().locale('pt-br').format('dddd, D [de] MMMM');
@@ -34,19 +35,25 @@ function TaskList(props) {
     const [icon, setIcon] = useState('eye');
     const [showAddTask, setShowAddTask] = useState(false)
     const [refreshing, setRefreshing] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const focusListener = props.navigation.addListener('didFocus', () => {
-            props.onFetchTasks(props.daysAhead);
+            handleFetchTasks()
         });
 
-        props.onFetchTasks(props.daysAhead);
+        handleFetchTasks()
         props.onFetchShowDoneTasks();
 
         return () => {
             focusListener.remove();
         }
     }, [])
+
+    async function handleFetchTasks() {
+        setLoading(true)
+        props.onFetchTasks(props.daysAhead)
+    }
 
     useEffect(() => {
         setIcon(props.showDoneTasks ? 'eye' : 'eye-slash')
@@ -55,6 +62,7 @@ function TaskList(props) {
 
     useEffect(() => {
         setVisibleTasks(props.showDoneTasks ? props.tasks : props.tasks.filter(t => t.doneAt == null))
+        setLoading(false)
     }, [props.tasks])
 
     toggleTask = async (id, doneAt) => {
@@ -112,6 +120,9 @@ function TaskList(props) {
         props.onFetchTasks(props.daysAhead)
         setRefreshing(false)
     }
+
+    if (loading)
+        return <Load />
 
     return (
         <View style={styles.container}>

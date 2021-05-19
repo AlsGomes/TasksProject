@@ -1,9 +1,9 @@
 import { Lato_400Regular, useFonts } from '@expo-google-fonts/lato';
+import AppLoading from 'expo-app-loading';
 import React from 'react';
-import { Text } from 'react-native';
+import { Provider } from 'react-redux';
 import Navigator from './src/routes/Navigator';
-import { Provider } from 'react-redux'
-import storeConfig from './src/store/storeConfig'
+import storeConfig from './src/store/storeConfig';
 
 const store = storeConfig()
 const Redux = () => (
@@ -18,7 +18,7 @@ export default function App() {
   });
 
   if (!fontsLoaded)
-    return <Text></Text>
+    return <AppLoading />
 
   return (
     <Redux />
